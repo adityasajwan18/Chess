@@ -1,56 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Chess — Two Player / Vs Computer</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess Arena</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <header>
+    <div class="logo">♟ Chess Arena</div>
+    <button class="toggle" id="themeToggle">🌙</button>
+  </header>
+
   <div class="container">
-    <header>
-      <h1>Chess</h1>
-      <div class="controls">
-        <div class="modes">
-          <button id="mode-two" class="mode active">2 Player</button>
-          <button id="mode-ai" class="mode">Vs Computer</button>
-          <label class="side-label">Play as:
-            <select id="side-select">
-              <option value="w">White</option>
-              <option value="b">Black</option>
-            </select>
-          </label>
+    <!-- Home Screen -->
+    <div id="home" class="home">
+      <h1>Choose Your Battle</h1>
+      <p>Play against AI or challenge your friends.</p>
+
+      <div class="options">
+        <div class="card">
+          <h2>🤖 VS Computer</h2>
+          <p>Play offline against basic AI.</p>
+          <button id="startGame">Start Game</button>
         </div>
-        <div class="actions">
-          <button id="btn-restart">Restart</button>
-          <button id="btn-undo">Undo</button>
-        </div>
-        <div class="theme">
-          <label class="switch">Dark:
-            <input type="checkbox" id="dark-toggle" />
-          </label>
+
+        <div class="card">
+          <h2>👥 Multiplayer</h2>
+          <p>Online rooms coming soon.</p>
+          <button disabled>Coming Soon</button>
         </div>
       </div>
-    </header>
+    </div>
 
-    <main>
-      <div id="game-area">
-        <div id="board" class="board"></div>
-        <aside class="sidebar">
-          <div id="status" class="status">Ready</div>
-          <div id="moves" class="moves"></div>
-        </aside>
-      </div>
-    </main>
-
-    <footer>
-      <small>Built with <code>chess.js</code>. Use the buttons to switch mode and dark theme.</small>
-    </footer>
+    <!-- Board Screen -->
+    <div id="boardScreen" class="board-screen hidden">
+      <button id="backBtn">← Back</button>
+      <h2>Chess Board</h2>
+      <div id="board" class="board"></div>
+      <p class="hint">Click piece → click square</p>
+    </div>
   </div>
 
-  <!-- chess.js library (used for rules & legality) -->
-  <script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.min.js"></script>
-  <script src="js/ai.js"></script>
-  <script src="js/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
