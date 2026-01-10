@@ -1,0 +1,32 @@
+:root{
+  --bg:#f6f7fb; --text:#111; --accent:#2b7a78; --light-square:#f0d9b5; --dark-square:#b58863;
+}
+body{font-family:system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:0;color:var(--text);background:var(--bg)}
+.container{max-width:980px;margin:24px auto;padding:12px}
+header{display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0}
+.controls{display:flex;gap:12px;align-items:center}
+.modes .mode{padding:8px 12px;border-radius:6px;border:1px solid rgba(0,0,0,0.08);background:#fff;cursor:pointer}
+.modes .mode.active{background:var(--accent);color:#fff}
+.side-label{margin-left:8px}
+.actions button{padding:8px 10px;margin-left:8px}
+#game-area{display:flex;gap:20px;margin-top:20px}
+.board{display:grid;grid-template-columns:repeat(8,64px);grid-template-rows:repeat(8,64px);border:6px solid #333;box-shadow:0 6px 18px rgba(0,0,0,0.08)}
+.square{width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer}
+.square.light{background:var(--light-square)}
+.square.dark{background:var(--dark-square);color:white}
+.square.highlight{outline:3px solid rgba(255,255,0,0.9)}
+.sidebar{min-width:220px}
+.status{padding:10px;border-radius:6px;background:rgba(0,0,0,0.03);margin-bottom:10px}
+.moves{font-size:13px;white-space:pre-wrap}
+footer{margin-top:18px;color:rgba(0,0,0,0.6)}
+
+/* Dark mode */
+body.dark{ --bg:#121417; --text:#e9eef0; --accent:#2b7a78; --light-square:#769656; --dark-square:#b58863 }
+body.dark .board{border-color:#222}
+
+/* Responsive */
+@media (max-width:680px){
+  .board{grid-template-columns:repeat(8,40px);grid-template-rows:repeat(8,40px)}
+  .square{width:40px;height:40px;font-size:20px}
+}
