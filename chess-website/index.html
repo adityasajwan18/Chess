@@ -36,8 +36,19 @@
     <div id="boardScreen" class="board-screen hidden">
       <button id="backBtn">← Back</button>
       <h2>Chess Board</h2>
+      <div id="notifications" class="notifications"></div>
       <div id="board" class="board"></div>
       <p id="status" class="hint">Click piece → click square</p>
+    </div>
+    
+    <!-- Winner Screen -->
+    <div id="winnerScreen" class="winner-screen hidden">
+      <div class="winner-modal">
+        <h1 id="winnerTitle">Game Over!</h1>
+        <p id="winnerMessage">Congratulations!</p>
+        <button id="playAgainBtn">Play Again</button>
+        <button id="exitBtn">Exit to Menu</button>
+      </div>
     </div>
   </div>
 
