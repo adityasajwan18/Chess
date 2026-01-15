@@ -1,11 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   const home = document.getElementById("home");
   const boardScreen = document.getElementById("boardScreen");
+  const winnerScreen = document.getElementById("winnerScreen");
   const boardEl = document.getElementById("board");
   const statusEl = document.getElementById("status");
+  const notificationsEl = document.getElementById("notifications");
+  const winnerTitle = document.getElementById("winnerTitle");
+  const winnerMessage = document.getElementById("winnerMessage");
 
   const startBtn = document.getElementById("startGame");
   const backBtn = document.getElementById("backBtn");
+  const playAgainBtn = document.getElementById("playAgainBtn");
+  const exitBtn = document.getElementById("exitBtn");
   const themeToggle = document.getElementById("themeToggle");
 
   const initialBoard = [
@@ -19,15 +25,80 @@ document.addEventListener("DOMContentLoaded", () => {
     ["♖","♘","♗","♕","♔","♗","♘","♖"],
   ];
 
-  let board, selected = null, validMoves = [], whiteTurn = true;
+  let board, selected = null, validMoves = [], whiteTurn = true, gameOver = false;
 
   function resetGame() {
     board = JSON.parse(JSON.stringify(initialBoard));
     selected = null;
     validMoves = [];
     whiteTurn = true;
+    gameOver = false;
     statusEl.textContent = "White to move";
+    notificationsEl.textContent = "";
     renderBoard();
+  }
+
+  function findKing(isWhiteKing) {
+    const king = isWhiteKing ? "♔" : "♚";
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (board[r][c] === king) return { r, c };
+      }
+    }
+    return null;
+  }
+
+  function isInCheck(isWhiteKing) {
+    const king = findKing(isWhiteKing);
+    if (!king) return false;
+
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c];
+        if (piece && isWhite(piece) !== isWhiteKing) {
+          const moves = getLegalMoves(r, c);
+          if (moves.some(m => m.r === king.r && m.c === king.c)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  function hasLegalMoves(isWhitePlayer) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c];
+        if (piece && isWhite(piece) === isWhitePlayer) {
+          const moves = getLegalMoves(r, c);
+          if (moves.length > 0) return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  function checkGameEnd() {
+    if (hasLegalMoves(whiteTurn)) {
+      if (isInCheck(whiteTurn)) {
+        notificationsEl.textContent = `⚠️ ${whiteTurn ? "White" : "Black"} is in CHECK!`;
+      }
+      return false;
+    }
+
+    gameOver = true;
+    const inCheck = isInCheck(whiteTurn);
+
+    if (inCheck) {
+      winnerTitle.textContent = "Checkmate!";
+      winnerMessage.textContent = `${!whiteTurn ? "White" : "Black"} wins!`;
+    } else {
+      winnerTitle.textContent = "Stalemate!";
+      winnerMessage.textContent = "Draw game!";
+    }
+
+    return true;
   }
 
   function renderBoard() {
@@ -49,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function onSquareClick(r, c) {
+    if (gameOver) return;
     const piece = board[r][c];
 
     if (selected) {
@@ -58,6 +130,11 @@ document.addEventListener("DOMContentLoaded", () => {
         selected = null;
         validMoves = [];
         renderBoard();
+
+        if (checkGameEnd()) {
+          winnerScreen.classList.remove("hidden");
+          return;
+        }
 
         if (!whiteTurn) {
           statusEl.textContent = "Black thinking...";
@@ -166,7 +243,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (allMoves.length === 0) {
-      statusEl.textContent = "Game Over";
+      checkGameEnd();
+      if (gameOver) {
+        winnerScreen.classList.remove("hidden");
+      }
       return;
     }
 
@@ -175,6 +255,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     makeMove(move.sr, move.sc, move.tr, move.tc);
     renderBoard();
+
+    if (checkGameEnd()) {
+      winnerScreen.classList.remove("hidden");
+    }
   }
 
   function pieceValue(p) {
@@ -184,11 +268,24 @@ document.addEventListener("DOMContentLoaded", () => {
   startBtn.onclick = () => {
     home.classList.add("hidden");
     boardScreen.classList.remove("hidden");
+    winnerScreen.classList.add("hidden");
     resetGame();
   };
 
   backBtn.onclick = () => {
     boardScreen.classList.add("hidden");
+    home.classList.remove("hidden");
+    winnerScreen.classList.add("hidden");
+  };
+
+  playAgainBtn.onclick = () => {
+    winnerScreen.classList.add("hidden");
+    resetGame();
+  };
+
+  exitBtn.onclick = () => {
+    boardScreen.classList.add("hidden");
+    winnerScreen.classList.add("hidden");
     home.classList.remove("hidden");
   };
 
