@@ -196,6 +196,9 @@ body.dark .winner-modal {
   background: #2563eb;
   transform: scale(1.05);
 }
+
+@media(max-width:600px){
+  .board {
     grid-template-columns: repeat(8, 45px);
     grid-template-rows: repeat(8, 45px);
   }
