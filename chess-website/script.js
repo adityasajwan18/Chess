@@ -160,6 +160,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return;
       }
+      
+      // If clicking on a different piece of the same color, select that piece instead
+      if (piece && isWhite(piece) === whiteTurn) {
+        selected = { r, c };
+        validMoves = getLegalMoves(r, c);
+        renderBoard();
+        return;
+      }
+      
+      // Otherwise deselect
+      selected = null;
+      validMoves = [];
+      renderBoard();
+      return;
     }
 
     if (piece && isWhite(piece) === whiteTurn) {
