@@ -179,6 +179,20 @@ document.addEventListener("DOMContentLoaded", () => {
   function isWhite(p) { return "♙♖♘♗♕♔".includes(p); }
   function isBlack(p) { return "♟♜♞♝♛♚".includes(p); }
 
+  function isSquareUnderAttack(testBoard, row, col, byWhite) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = testBoard[r][c];
+        if (!piece) continue;
+        if (isWhite(piece) !== byWhite) continue;
+
+        const moves = getLegalMovesOnBoard(testBoard, r, c);
+        if (moves.some(m => m.r === row && m.c === col)) return true;
+      }
+    }
+    return false;
+  }
+
   function getLegalMoves(r, c) {
     const piece = board[r][c];
     const moves = [];
@@ -234,11 +248,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (piece === "♔" || piece === "♚") {
+      const isWhiteKing = isWhite(piece);
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
         if(dr||dc){
           const nr=r+dr,nc=c+dc;
-          if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!board[nr][nc] || isWhite(piece)!==isWhite(board[nr][nc])))
-            moves.push({r:nr,c:nc});
+          if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!board[nr][nc] || isWhite(piece)!==isWhite(board[nr][nc]))){
+            // Check if this square is safe (not under attack)
+            const testBoard = board.map(row => [...row]);
+            testBoard[nr][nc] = piece;
+            testBoard[r][c] = "";
+            if (!isSquareUnderAttack(testBoard, nr, nc, !isWhiteKing)) {
+              moves.push({r:nr,c:nc});
+            }
+          }
         }
       }
     }
