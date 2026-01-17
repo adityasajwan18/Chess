@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const winnerMessage = document.getElementById("winnerMessage");
 
   const startBtn = document.getElementById("startGame");
+  const startLocalMultiplayerBtn = document.getElementById("startLocalMultiplayer");
   const backBtn = document.getElementById("backBtn");
   const playAgainBtn = document.getElementById("playAgainBtn");
   const exitBtn = document.getElementById("exitBtn");
@@ -25,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ["♖","♘","♗","♕","♔","♗","♘","♖"],
   ];
 
-  let board, selected = null, validMoves = [], whiteTurn = true, gameOver = false;
+  let board, selected = null, validMoves = [], whiteTurn = true, gameOver = false, isLocalMultiplayer = false;
 
   function resetGame() {
     board = JSON.parse(JSON.stringify(initialBoard));
