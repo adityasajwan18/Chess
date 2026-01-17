@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
     validMoves = [];
     whiteTurn = true;
     gameOver = false;
-    statusEl.textContent = "White to move";
+    statusEl.textContent = isLocalMultiplayer ? "White Player's Turn ⚪" : "White to move";
     notificationsEl.textContent = "";
     renderBoard();
   }
