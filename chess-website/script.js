@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        if (!whiteTurn) {
+        if (!isLocalMultiplayer && !whiteTurn) {
           statusEl.textContent = "Black thinking...";
           setTimeout(aiMove, 500);
         }
@@ -534,6 +534,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   startBtn.onclick = () => {
+    isLocalMultiplayer = false;
+    home.classList.add("hidden");
+    boardScreen.classList.remove("hidden");
+    winnerScreen.classList.add("hidden");
+    resetGame();
+  };
+
+  startLocalMultiplayerBtn.onclick = () => {
+    isLocalMultiplayer = true;
     home.classList.add("hidden");
     boardScreen.classList.remove("hidden");
     winnerScreen.classList.add("hidden");
