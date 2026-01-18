@@ -147,48 +147,66 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function onSquareClick(r, c) {
-    if (gameOver) return;
-    const piece = board[r][c];
+    try {
+      if (gameOver) return;
+      const piece = board[r][c];
 
-    if (selected) {
-      const move = validMoves.find(m => m.r === r && m.c === c);
-      if (move) {
-        makeMove(selected.r, selected.c, r, c);
+      if (selected) {
+        const move = validMoves.find(m => m.r === r && m.c === c);
+        if (move) {
+          makeMove(selected.r, selected.c, r, c);
+          selected = null;
+          validMoves = [];
+          renderBoard();
+          updateStatus();
+
+          if (checkGameEnd()) {
+            winnerScreen.classList.remove("hidden");
+            return;
+          }
+
+          if (!isLocalMultiplayer && !whiteTurn) {
+            statusEl.textContent = "Black thinking...";
+            setTimeout(aiMove, 500);
+          }
+          return;
+        }
+        
+        // If clicking on a different piece of the same color, select that piece instead
+        if (piece && isWhite(piece) === whiteTurn) {
+          selected = { r, c };
+          validMoves = getLegalMoves(r, c);
+          renderBoard();
+          updateStatus();
+          return;
+        }
+        
+        // Otherwise deselect
         selected = null;
         validMoves = [];
         renderBoard();
-
-        if (checkGameEnd()) {
-          winnerScreen.classList.remove("hidden");
-          return;
-        }
-
-        if (!isLocalMultiplayer && !whiteTurn) {
-          statusEl.textContent = "Black thinking...";
-          setTimeout(aiMove, 500);
-        }
+        updateStatus();
         return;
       }
-      
-      // If clicking on a different piece of the same color, select that piece instead
+
       if (piece && isWhite(piece) === whiteTurn) {
         selected = { r, c };
         validMoves = getLegalMoves(r, c);
         renderBoard();
-        return;
+        updateStatus();
       }
-      
-      // Otherwise deselect
-      selected = null;
-      validMoves = [];
-      renderBoard();
-      return;
+    } catch(e) {
+      console.error("Error in onSquareClick:", e);
     }
+  }
 
-    if (piece && isWhite(piece) === whiteTurn) {
-      selected = { r, c };
-      validMoves = getLegalMoves(r, c);
-      renderBoard();
+  function updateStatus() {
+    if (selected && validMoves.length > 0) {
+      statusEl.textContent = `Selected piece - ${validMoves.length} move(s) available`;
+    } else if (selected) {
+      statusEl.textContent = "Selected - no valid moves";
+    } else {
+      statusEl.textContent = isLocalMultiplayer ? (whiteTurn ? "White Player's Turn ⚪" : "Black Player's Turn ⚫") : (whiteTurn ? "White to move" : "Black to move");
     }
   }
 
