@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (piece && isWhite(piece) === whiteTurn) {
         selected = { r, c };
         validMoves = getLegalMoves(r, c);
+        console.log(`Selected piece at [${r},${c}]: ${piece}, valid moves:`, validMoves);
         renderBoard();
         updateStatus();
       }
@@ -309,29 +310,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (piece === "♔" || piece === "♚") {
-      const isWhiteKing = isWhite(piece);
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
         if(dr||dc){
           const nr=r+dr,nc=c+dc;
-          if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!board[nr][nc] || isWhite(piece)!==isWhite(board[nr][nc]))){
+          if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!board[nr][nc] || isWhite(piece)!==isWhite(board[nr][nc])))
             moves.push({r:nr,c:nc});
-          }
         }
       }
     }
 
-    // Filter out moves that would leave king in check
-    const isWhitePiece = isWhite(piece);
-    moves = moves.filter(move => {
-      const testBoard = board.map(row => [...row]);
-      testBoard[move.r][move.c] = testBoard[r][c];
-      testBoard[r][c] = "";
-      
-      const kingPos = findKingOnBoard(testBoard, isWhitePiece);
-      if (!kingPos) return true;
-      
-      return !isSquareUnderAttack(testBoard, kingPos.r, kingPos.c, !isWhitePiece);
-    });
+    // Filter out moves that would leave king in check (only for non-kings to avoid recursion)
+    if (piece !== "♔" && piece !== "♚") {
+      const isWhitePiece = isWhite(piece);
+      moves = moves.filter(move => {
+        const testBoard = board.map(row => [...row]);
+        testBoard[move.r][move.c] = testBoard[r][c];
+        testBoard[r][c] = "";
+        
+        const kingPos = findKingOnBoard(testBoard, isWhitePiece);
+        if (!kingPos) return true;
+        
+        return !isSquareUnderAttack(testBoard, kingPos.r, kingPos.c, !isWhitePiece);
+      });
+    }
 
     return moves;
     } catch(e) {
