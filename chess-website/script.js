@@ -297,7 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (piece === "♖" || piece === "♜") slide(dirs.rook);
-    if (piece === "♖" || piece === "♜") slide(dirs.rook);
     if (piece === "♗" || piece === "♝") slide(dirs.bishop);
     if (piece === "♕" || piece === "♛") slide(dirs.queen);
 
@@ -315,39 +314,30 @@ document.addEventListener("DOMContentLoaded", () => {
         if(dr||dc){
           const nr=r+dr,nc=c+dc;
           if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!board[nr][nc] || isWhite(piece)!==isWhite(board[nr][nc]))){
-            // Check if this square is safe (not under attack)
-            const testBoard = board.map(row => [...row]);
-            testBoard[nr][nc] = piece;
-            testBoard[r][c] = "";
-            if (!isSquareUnderAttack(testBoard, nr, nc, !isWhiteKing)) {
-              moves.push({r:nr,c:nc});
-            }
+            moves.push({r:nr,c:nc});
           }
         }
       }
     }
 
-    // Filter out moves that would leave king in check (only for non-kings to avoid recursion)
-    if (piece !== "♔" && piece !== "♚") {
-      const isWhitePiece = isWhite(piece);
-      moves = moves.filter(move => {
-        const testBoard = board.map(row => [...row]);
-        testBoard[move.r][move.c] = testBoard[r][c];
-        testBoard[r][c] = "";
-        
-        const kingPos = findKingOnBoard(testBoard, isWhitePiece);
-        if (!kingPos) return true;
-        
-        return !isSquareUnderAttack(testBoard, kingPos.r, kingPos.c, !isWhitePiece);
-      });
-    }
+    // Filter out moves that would leave king in check
+    const isWhitePiece = isWhite(piece);
+    moves = moves.filter(move => {
+      const testBoard = board.map(row => [...row]);
+      testBoard[move.r][move.c] = testBoard[r][c];
+      testBoard[r][c] = "";
+      
+      const kingPos = findKingOnBoard(testBoard, isWhitePiece);
+      if (!kingPos) return true;
+      
+      return !isSquareUnderAttack(testBoard, kingPos.r, kingPos.c, !isWhitePiece);
+    });
 
     return moves;
     } catch(e) {
       console.error("Error in getLegalMoves:", e);
       return [];
     }
-  }
   }
 
   function pieceValue(p) {
