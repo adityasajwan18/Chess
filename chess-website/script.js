@@ -713,4 +713,17 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.toggle("dark");
     };
   }
+
+  if (undoBtn) {
+    undoBtn.onclick = () => {
+      if (!isLocalMultiplayer) {
+        notificationsEl.textContent = "Cannot undo in AI mode";
+        setTimeout(() => {
+          notificationsEl.textContent = "";
+        }, 2000);
+        return;
+      }
+      undoLastMove();
+    };
+  }
 });
