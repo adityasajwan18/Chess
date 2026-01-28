@@ -22,22 +22,45 @@
       <div class="options">
         <div class="card">
           <h2>🤖 VS Computer</h2>
-          <p>Play offline against basic AI.</p>
+          <p>Play against AI opponent.</p>
+          <div class="difficulty-select">
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
           <button id="startGame">Start Game</button>
         </div>
 
         <div class="card">
-          <h2>👥 Multiplayer</h2>
-          <p>Online rooms coming soon.</p>
-          <button disabled>Coming Soon</button>
+          <h2>👥 Local Multiplayer</h2>
+          <p>Play with a friend on the same PC.</p>
+          <button id="startLocalMultiplayer">Start Game</button>
         </div>
       </div>
     </div>
     <div id="boardScreen" class="board-screen hidden">
-      <button id="backBtn">← Back</button>
-      <h2>Chess Board</h2>
+      <div class="game-header">
+        <button id="backBtn" class="btn-small">← Back</button>
+        <h2>Chess Board</h2>
+        <button id="undoBtn" class="btn-small">↶ Undo</button>
+      </div>
       <div id="notifications" class="notifications"></div>
-      <div id="board" class="board"></div>
+      <div class="game-container">
+        <div id="board" class="board"></div>
+        <div class="sidebar">
+          <div class="stats">
+            <h3>Game Stats</h3>
+            <div id="stats" class="stats-content"></div>
+          </div>
+          <div class="history">
+            <h3>Move History</h3>
+            <div id="moveHistory" class="move-list"></div>
+          </div>
+        </div>
+      </div>
       <p id="status" class="hint">Click piece → click square</p>
     </div>
     
