@@ -224,22 +224,10 @@ document.addEventListener("DOMContentLoaded", () => {
       statusEl.textContent = "Selected - no valid moves";
     } else {
       statusEl.textContent = isLocalMultiplayer ? (whiteTurn ? "White Player's Turn ⚪" : "Black Player's Turn ⚫") : (whiteTurn ? "White to move" : "Black to move");
-    // Save board state before move
-    boardHistory.push(board.map(row => [...row]));
-    
-    const piece = board[sr][sc];
-    const captured = board[tr][tc] ? "x" : "-";
-    const toSquare = String.fromCharCode(97 + tc) + (8 - tr);
-    const fromSquare = String.fromCharCode(97 + sc) + (8 - sr);
-    
-    board[tr][tc] = board[sr][sc];
-    board[sr][sc] = "";
-    whiteTurn = !whiteTurn;
-    
-    // Record move in algebraic notation
-    moveHistory.push({
-      pieceupdateMoveHistory() {
-    moveHistoryEl.innerHTML = "";
+    }
+  }
+
+  function updateMoveHistory() {    if (!moveHistoryEl) return;    moveHistoryEl.innerHTML = "";
     moveHistory.forEach((move, idx) => {
       const div = document.createElement("div");
       div.className = "move-item";
@@ -290,7 +278,24 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       notificationsEl.textContent = "";
     }, 2000);
- 
+  }
+  function makeMove(sr, sc, tr, tc) {
+    // Save board state before move
+    boardHistory.push(board.map(row => [...row]));
+    
+    const piece = board[sr][sc];
+    const captured = board[tr][tc] ? "x" : "-";
+    const toSquare = String.fromCharCode(97 + tc) + (8 - tr);
+    const fromSquare = String.fromCharCode(97 + sc) + (8 - sr);
+    
+    board[tr][tc] = board[sr][sc];
+    board[sr][sc] = "";
+    whiteTurn = !whiteTurn;
+    
+    // Record move in algebraic notation
+    moveHistory.push({
+      piece: piece,
+      from: fromSquare,
       to: toSquare,
       captured: captured,
       player: whiteTurn ? "Black" : "White"
@@ -298,16 +303,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     updateMoveHistory();
     updateStats();
-    
-  function makeMove(sr, sc, tr, tc) {
-    board[tr][tc] = board[sr][sc];
-    board[sr][sc] = "";
-    whiteTurn = !whiteTurn;
-    if (isLocalMultiplayer) {
-      statusEl.textContent = whiteTurn ? "White Player's Turn ⚪" : "Black Player's Turn ⚫";
-    } else {
-      statusEl.textContent = whiteTurn ? "White to move" : "Black to move";
-    }
   }
 
   function isWhite(p) { return "♙♖♘♗♕♔".includes(p); }
@@ -382,6 +377,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (piece === "♖" || piece === "♜") slide(dirs.rook);
+    if (piece === "♗" || piece === "♝") slide(dirs.bishop);
+    if (piece === "♕" || piece === "♛") slide(dirs.queen);
+
     if (piece === "♗" || piece === "♝") slide(dirs.bishop);
     if (piece === "♕" || piece === "♛") slide(dirs.queen);
 
@@ -542,17 +540,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (piece === "♖" || piece === "♜") slide(dirs.rook);
-    const depth = difficultyDepth[difficulty] || 2;
+    if (piece === "♗" || piece === "♝") slide(dirs.bishop);
+    if (piece === "♕" || piece === "♛") slide(dirs.queen);
 
-    for (let r = 0; r < 8; r++) {
-      for (let c = 0; c < 8; c++) {
-        if (board[r][c] && isBlack(board[r][c])) {
-          const moves = getLegalMoves(r, c);
-          moves.forEach(m => {
-            const testBoard = board.map(row => [...row]);
-            testBoard[m.r][m.c] = testBoard[r][c];
-            testBoard[r][c] = "";
-            const score = minimax(testBoard, depth
+    if (piece === "♘" || piece === "♞") {
+      [[2,1],[2,-1],[-2,1],[-2,-1],[1,2],[1,-2],[-1,2],[-1,-2]].forEach(([dr,dc])=>{
+        const nr=r+dr,nc=c+dc;
+        if(nr>=0&&nr<8&&nc>=0&&nc<8 && (!testBoard[nr][nc] || isWhite(piece)!==isWhite(testBoard[nr][nc])))
+          moves.push({r:nr,c:nc});
+      });
+    }
 
     if (piece === "♔" || piece === "♚") {
       for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
@@ -579,7 +576,6 @@ document.addEventListener("DOMContentLoaded", () => {
           if (testBoard[r][c] && isBlack(testBoard[r][c])) {
             const moves = getLegalMovesOnBoard(testBoard, r, c);
             for (let move of moves) {
-    difficulty = difficultySelect.value;
               const newBoard = testBoard.map(row => [...row]);
               newBoard[move.r][move.c] = newBoard[r][c];
               newBoard[r][c] = "";
@@ -646,20 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
     makeMove(move.sr, move.sc, move.tr, move.tc);
     renderBoard();
 
-   
-
-  if (undoBtn) {
-    undoBtn.onclick = () => {
-      if (!isLocalMultiplayer) {
-        notificationsEl.textContent = "Cannot undo in AI mode";
-        setTimeout(() => {
-          notificationsEl.textContent = "";
-        }, 2000);
-        return;
-      }
-      undoLastMove();
-    };
-  } if (checkGameEnd()) {
+    if (checkGameEnd()) {
       winnerScreen.classList.remove("hidden");
     }
   }
@@ -724,6 +707,12 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       undoLastMove();
+    };
+  }
+
+  if (difficultySelect) {
+    difficultySelect.onchange = () => {
+      difficulty = difficultySelect.value;
     };
   }
 });
