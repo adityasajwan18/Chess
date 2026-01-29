@@ -10,11 +10,10 @@
 
   <header>
     <div class="logo">♟ Chess Arena</div>
-    <button class="toggle" id="themeToggle">🌙</button>
+    <button class="toggle" id="themeToggle">🌙/☀️</button>
   </header>
 
   <div class="container">
-    <!-- Home Screen -->
     <div id="home" class="home">
       <h1>Choose Your Battle</h1>
       <p>Play against AI or challenge your friends.</p>
@@ -26,9 +25,9 @@
           <div class="difficulty-select">
             <label for="difficulty">Difficulty:</label>
             <select id="difficulty">
-              <option value="easy">Easy</option>
+              <option value="easy">Easy (Fast)</option>
               <option value="medium" selected>Medium</option>
-              <option value="hard">Hard</option>
+              <option value="hard">Hard (Slow)</option>
             </select>
           </div>
           <button id="startGame">Start Game</button>
@@ -41,15 +40,18 @@
         </div>
       </div>
     </div>
+
     <div id="boardScreen" class="board-screen hidden">
       <div class="game-header">
-        <button id="backBtn" class="btn-small">← Back</button>
+        <button id="backBtn" class="btn-small">← Exit</button>
         <h2>Chess Board</h2>
         <button id="undoBtn" class="btn-small">↶ Undo</button>
       </div>
       <div id="notifications" class="notifications"></div>
+      
       <div class="game-container">
         <div id="board" class="board"></div>
+        
         <div class="sidebar">
           <div class="stats">
             <h3>Game Stats</h3>
@@ -64,13 +66,12 @@
       <p id="status" class="hint">Click piece → click square</p>
     </div>
     
-    <!-- Winner Screen -->
     <div id="winnerScreen" class="winner-screen hidden">
       <div class="winner-modal">
         <h1 id="winnerTitle">Game Over!</h1>
         <p id="winnerMessage">Congratulations you win!</p>
         <button id="playAgainBtn">Play Again</button>
-        <button id="exitBtn">Exit to Main menu</button>
+        <button id="exitBtn">Exit to Main Menu</button>
       </div>
     </div>
   </div>
