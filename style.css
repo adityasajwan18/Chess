@@ -185,8 +185,12 @@ body.dark .card {
 }
 
 /* Board Colors */
-.light { background: #f0fdf4; color: black; }
-.dark-square { background: #15803d; color: white; }
+.light { 
+  background-color: #eeeed2; /* Classic Beige */
+}
+.dark-square { 
+  background-color: #769656; /* Standard Chess Green */
+}
 
 /* Highlights */
 .selected { background-color: #fbbf24 !important; }
