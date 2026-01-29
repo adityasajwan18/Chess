@@ -168,9 +168,10 @@ body.dark .card {
   display: grid;
   grid-template-columns: repeat(8, 60px);
   grid-template-rows: repeat(8, 60px);
-  border: 5px solid #475569;
+  border: 8px solid #333; 
   border-radius: 4px;
   user-select: none;
+  background: #333;
 }
 
 .square {
