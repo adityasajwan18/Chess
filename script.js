@@ -421,10 +421,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const sq = document.createElement("div");
         sq.className = "square " + ((r + c) % 2 === 0 ? "light" : "dark-square");
         
-        if (selected && selected.r === r && selected.c === c) sq.classList.add("selected");
-        if (validMoves.some(m => m.r === r && m.c === c)) sq.classList.add("valid");
+        // Highlight Selected Square
+        if (selected && selected.r === r && selected.c === c) {
+            sq.classList.add("selected");
+        }
+        
+        // Highlight Valid Moves
+        const move = validMoves.find(m => m.r === r && m.c === c);
+        if (move) {
+            sq.classList.add("valid");
+            // If there's a piece there (capture), add a specific class for styling
+            if (board[r][c]) sq.classList.add("capture"); 
+            // Also highlight en passant captures
+            if (move.isEnPassant) sq.classList.add("capture");
+        }
 
-        sq.textContent = piece;
+        if (piece) {
+            sq.textContent = piece;
+            // Apply Color Class based on piece identity
+            if (isWhite(piece)) {
+                sq.classList.add("white-piece");
+            } else {
+                sq.classList.add("black-piece");
+            }
+        }
+        
         sq.onclick = () => onSquareClick(r, c);
         boardEl.appendChild(sq);
       });
@@ -532,26 +553,84 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function checkGameEnd() {
-    const whiteKing = findKing(board, true);
-    const blackKing = findKing(board, false);
-    
-    if(!whiteKing || !blackKing) {
-        gameOver = true;
-        winnerScreen.classList.remove("hidden");
-        winnerTitle.textContent = "Game Over";
-        return;
+function hasAnyLegalMoves(forWhiteTurn) {
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const piece = board[r][c];
+        // Check moves for every piece of the current player
+        if (piece && isWhite(piece) === forWhiteTurn) {
+          const moves = getLegalMoves(r, c);
+          if (moves.length > 0) return true; // Found at least one move
+        }
+      }
     }
-    
-    // Checkmate detection (slow, so only running if check is likely or simple)
-    // For this simple version, we rely on King Capture validation or simple check
-    if (isSquareUnderAttack(board, whiteKing.r, whiteKing.c, false)) {
-       notificationsEl.textContent = "Check!";
-    } else {
-       notificationsEl.textContent = "";
-    }
+    return false; // No moves available anywhere
   }
 
+  function checkGameEnd() {
+    // 1. Check if King is missing (Rare, but safety net)
+    const whiteKing = findKing(board, true);
+    const blackKing = findKing(board, false);
+    if (!whiteKing) { showGameOver("Black Wins!", "White King Captured"); return true; }
+    if (!blackKing) { showGameOver("White Wins!", "Black King Captured"); return true; }
+
+    // 2. Check for Checkmate or Stalemate
+    // We check the player whose turn it currently is
+    const hasMoves = hasAnyLegalMoves(whiteTurn);
+    const inCheck = isSquareUnderAttack(board, whiteTurn ? whiteKing.r : whiteKing.c, whiteTurn ? whiteKing.c : blackKing.c, !whiteTurn); 
+    // Note: Re-find king to be safe or use existing vars
+    const kingPos = whiteTurn ? whiteKing : blackKing;
+    const kingInCheck = isSquareUnderAttack(board, kingPos.r, kingPos.c, !whiteTurn);
+
+    if (!hasMoves) {
+      if (kingInCheck) {
+        // Checkmate
+        const winner = !whiteTurn ? "White" : "Black";
+        showGameOver(`${winner} Wins!`, "Checkmate!");
+        return true;
+      } else {
+        // Stalemate
+        showGameOver("Draw", "Stalemate - No valid moves");
+        return true;
+      }
+    }
+    
+    // Just a regular Check warning
+    if (kingInCheck) {
+      notificationsEl.textContent = "⚠️ Check!";
+    } else {
+      notificationsEl.textContent = "";
+    }
+    
+    return false;
+  }
+
+  function showGameOver(title, message) {
+    gameOver = true;
+    winnerTitle.textContent = title;
+    winnerMessage.textContent = message;
+    winnerScreen.classList.remove("hidden");
+  }
+
+  // --- Event Listeners (Update these) ---
+
+  // Retry / Play Again
+  if (playAgainBtn) {
+    playAgainBtn.onclick = () => {
+      console.log("Restarting game...");
+      winnerScreen.classList.add("hidden");
+      resetGame(); // This resets the board, turn, and history
+    };
+  }
+
+  // Exit to Menu
+  if (exitBtn) {
+    exitBtn.onclick = () => {
+      winnerScreen.classList.add("hidden");
+      boardScreen.classList.add("hidden");
+      home.classList.remove("hidden");
+    };
+  }
   function updateStatus() {
     if(!gameOver) statusEl.textContent = whiteTurn ? "White's Turn" : "Black's Turn";
   }
