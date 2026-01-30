@@ -353,3 +353,36 @@ body.dark .winner-modal { background: #1e293b; }
   width: 50px;
   height: 50px;
 }
+/* Promotion Modal Specifics */
+.promotion-options {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.promotion-options button {
+  font-size: 40px;
+  width: 70px;
+  height: 70px;
+  background: #f0fdf4;
+  border: 2px solid #333;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+}
+
+.promotion-options button:hover {
+  transform: scale(1.1);
+  background: #baca44;
+}
+
+body.dark .promotion-options button {
+  background: #334155;
+  color: white;
+  border-color: #94a3b8;
+}
