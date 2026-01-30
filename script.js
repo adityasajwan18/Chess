@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let gameOver = false;
   let isLocalMultiplayer = false;
   let difficulty = "medium";
+  let pendingPromotion = null; // Tracks the move waiting for user input
   const difficultyDepth = { easy: 1, medium: 2, hard: 3 };
 
   // SPECIAL MOVE STATE
@@ -611,6 +612,7 @@ function hasAnyLegalMoves(forWhiteTurn) {
     winnerMessage.textContent = message;
     winnerScreen.classList.remove("hidden");
   }
+  
 
   // --- Event Listeners (Update these) ---
 
