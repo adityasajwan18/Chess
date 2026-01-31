@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderBoard();
             
             if (!checkGameEnd() && !isLocalMultiplayer && !whiteTurn) {
-                setTimeout(aiMakeMove, 100);
+                setTimeout(aiMakeMove, 1000);
             }
             return;
         }
@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderBoard();
     
     if (!checkGameEnd() && !isLocalMultiplayer && !whiteTurn) {
-        setTimeout(aiMakeMove, 100);
+        setTimeout(aiMakeMove, 1000);
     }
   };
 
