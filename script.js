@@ -425,7 +425,7 @@ document.addEventListener("DOMContentLoaded", () => {
             renderBoard();
             
             if (!checkGameEnd() && !isLocalMultiplayer && !whiteTurn) {
-                setTimeout(aiMakeMove, 1000);
+                setTimeout(aiMakeMove, 800);
             }
             return;
         }
@@ -613,7 +613,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateMoveHistory();
     updateStatus();
     notificationsEl.textContent = "Undo ↶";
-    setTimeout(() => notificationsEl.textContent="", 1000);
+    setTimeout(() => notificationsEl.textContent="", 800);
   }
 
   // --- UI Utilities ---
