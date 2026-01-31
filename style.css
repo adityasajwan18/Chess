@@ -1,26 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
 }
 
 body {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e4e4e7, #cbd5e1);
+  /* Subtle animated gradient background */
+  background: linear-gradient(135deg, #e0e7ff, #f3f4f6, #e4e4e7);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
   color: #111;
   transition: background 0.3s, color 0.3s;
 }
 
 body.dark {
-  background: linear-gradient(135deg, #0f172a, #000);
+  background: linear-gradient(135deg, #0f172a, #1e293b, #000);
+  background-size: 400% 400%;
   color: white;
 }
 
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 header {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
-  padding: 20px;
+  padding: 20px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -28,17 +40,21 @@ header {
 
 .logo {
   font-size: 28px;
-  font-weight: bold;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
 .toggle {
-  padding: 8px 14px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
-  background: rgba(255,255,255,0.2);
+  padding: 10px 18px;
+  border-radius: 30px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(255,255,255,0.4);
   cursor: pointer;
   font-size: 16px;
+  transition: transform 0.2s;
+  backdrop-filter: blur(5px);
 }
+.toggle:hover { transform: scale(1.1); }
 
 .container {
   display: flex;
@@ -46,87 +62,155 @@ header {
   align-items: center;
   flex-direction: column;
   padding: 20px;
+  min-height: 80vh;
 }
+
+/* --- NEW HOME SCREEN STYLING (Animated & Modern) --- */
 
 .home {
   text-align: center;
-  max-width: 900px;
+  max-width: 1000px;
   width: 100%;
+  /* Entrance Animation */
+  animation: fadeInUp 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .home h1 {
-  font-size: 3rem;
+  font-size: 4.5rem;
   margin-bottom: 10px;
+  line-height: 1.1;
+  font-weight: 800;
+  /* Gradient Text */
+  background: linear-gradient(135deg, #1e293b 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+body.dark .home h1 {
+  background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .home p {
-  opacity: 0.8;
+  font-size: 1.2rem;
+  opacity: 0.7;
+  margin-bottom: 50px;
+  font-weight: 500;
 }
 
 .options {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
+/* Glassmorphism Cards */
 .card {
-  background: rgba(255,255,255,0.7);
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  transition: 0.3s;
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.65);
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(12px);
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 body.dark .card {
-  background: rgba(30, 41, 59, 0.8);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-15px) scale(1.02);
+  box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.25);
+  border-color: #fff;
 }
 
-.card h2 { margin-bottom: 10px; }
+.card h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.card p {
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+}
 
 .difficulty-select {
-  margin: 20px 0;
+  margin: 10px 0 25px 0;
   text-align: left;
 }
 
 .difficulty-select label {
   display: block;
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #64748b;
 }
+
+body.dark .difficulty-select label { color: #94a3b8; }
 
 .difficulty-select select {
   width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-.card button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  font-weight: bold;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: rgba(255,255,255,0.8);
+  font-size: 1rem;
+  font-weight: 500;
+  outline: none;
   cursor: pointer;
   transition: 0.2s;
 }
 
-.card button:hover {
-  background: #1d4ed8;
+.difficulty-select select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
-/* --- Game Board UI --- */
+.card button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+  margin-top: auto;
+}
+
+.card button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.5);
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- END NEW HOME SCREEN STYLING --- */
+
+
+/* --- Game Board UI (KEPT EXACTLY AS OLD) --- */
 .board-screen {
   display: flex;
   flex-direction: column;
@@ -315,7 +399,11 @@ body.dark .winner-modal { background: #1e293b; }
   .stats, .history { flex: 1; }
   
   .game-header h2 { font-size: 1.2rem; }
+  
+  .home h1 { font-size: 2.5rem; }
 }
+
+/* Pieces Styling */
 .white-piece {
   color: #ffffff !important;
   text-shadow: 
