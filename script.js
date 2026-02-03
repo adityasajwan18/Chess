@@ -569,7 +569,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return true;
       }
     }
-    
     if (kingInCheck) notificationsEl.textContent = "⚠️ Check!";
     else notificationsEl.textContent = "";
     return false;
