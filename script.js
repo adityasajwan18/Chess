@@ -575,7 +575,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     return false;
   }
-
   function showGameOver(title, message) {
     gameOver = true;
     winnerTitle.textContent = title;
