@@ -572,7 +572,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     if (kingInCheck) notificationsEl.textContent = "⚠️ Check!";
     else notificationsEl.textContent = "";
-    
     return false;
   }
   function showGameOver(title, message) {
