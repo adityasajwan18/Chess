@@ -579,7 +579,6 @@ document.addEventListener("DOMContentLoaded", () => {
     winnerMessage.textContent = message;
     winnerScreen.classList.remove("hidden");
   }
-  // --- Undo Logic ---
   function undoLastMove() {
     if (gameHistory.length === 0 || gameOver) return;
     
