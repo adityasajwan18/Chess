@@ -423,7 +423,7 @@ body.dark .winner-modal { background: #1e293b; }
 
 /* Selected & Valid Moves */
 .selected { 
-  background-color: #baca44 !important; /* Yellow highlight */
+  background-color: #baca44 !important;
 }
 
 .valid::after {
