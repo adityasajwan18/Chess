@@ -535,7 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return score;
   }
 
-  // --- Game End Logic ---
   function hasAnyLegalMoves(forWhiteTurn) {
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
@@ -551,10 +550,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function checkGameEnd() {
     const whiteKing = findKing(board, true);
     const blackKing = findKing(board, false);
-    
     if (!whiteKing) { showGameOver("Black Wins!", "White King Captured"); return true; }
     if (!blackKing) { showGameOver("White Wins!", "Black King Captured"); return true; }
-
     const hasMoves = hasAnyLegalMoves(whiteTurn);
     const kingPos = whiteTurn ? whiteKing : blackKing;
     const kingInCheck = isSquareUnderAttack(board, kingPos.r, kingPos.c, !whiteTurn);
