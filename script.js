@@ -581,7 +581,6 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // If AI mode, undo 2 moves (AI + Player) to return to Player turn
     let steps = (!isLocalMultiplayer && gameHistory.length >= 2) ? 2 : 1;
-    
     for(let i=0; i<steps; i++) {
         const state = gameHistory.pop();
         if (!state) break;
