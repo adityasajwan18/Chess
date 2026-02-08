@@ -265,7 +265,7 @@ body.dark .difficulty-select label { color: #94a3b8; }
 
 /* Board Colors */
 .light { 
-  background-color: #eeeed2; /* Classic Beige */
+  background-color: #eeeed2; 
 }
 .dark-square { 
   background-color: #769656; /* Standard Chess Green */
